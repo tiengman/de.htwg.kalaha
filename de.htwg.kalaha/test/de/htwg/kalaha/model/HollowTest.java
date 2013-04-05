@@ -7,22 +7,22 @@ import junit.framework.TestCase;
 public class HollowTest extends TestCase{
 	
 	Hollow hollow;
-	Hollow hollowPrev;
+	Hollow hollowOpposite;
 	Hollow hollowNext;
 	Player player;
 	Marble newMarble;
 	
 	public void setUp() throws Exception {
 		player = new Player("Player 1");
-		hollow = new Hollow(player, 6);
-		hollowPrev = new Hollow(player, 6);
-		hollowNext = new Hollow(player, 6);
+		hollow = new Hollow(player);
+		hollowOpposite = new Hollow(player);
+		hollowNext = new Hollow(player);
 		newMarble = new Marble();
 	}
 	
-	public void testGetPrev() {
-		hollow.setPrev(hollowPrev);
-		assertEquals(this.hollowPrev, hollow.getPrev());
+	public void testGetOpposite() {
+		hollow.setOpposite(hollowOpposite);
+		assertEquals(this.hollowOpposite, hollow.getOpposite());
 	}
 	
 	public void testGetNext() {
@@ -34,19 +34,18 @@ public class HollowTest extends TestCase{
 		assertEquals(this.player, hollow.getOwner());
 	}
 	
-	public void testSetMarbles() {
-		assertEquals(6, hollow.getMarbleCount());
-	}
-	
 	public void testAddMarble() {
 		hollow.addMarble(newMarble);
-		assertEquals(7, hollow.getMarbleCount());
+		assertEquals(1, hollow.getMarbleCount());
 	}
 	
 	public void testGetMarbles() {
+		hollow.addMarble(newMarble);
 		ArrayList<Marble> marbleList = hollow.getMarbles();
 		assertEquals(0, hollow.getMarbleCount());
-		assertEquals(6, marbleList.size());		
+		assertEquals(1, marbleList.size());	
+		hollow.setMarbles(5);
+		assertEquals(5, hollow.getMarbleCount());
 	}
 	
 	

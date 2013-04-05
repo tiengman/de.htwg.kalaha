@@ -4,28 +4,27 @@ import java.util.ArrayList;
 
 public class Hollow {
 
-	private Hollow prev;
+	private Hollow opposite;
 	private Hollow next;
 	private Player owner;
 	private ArrayList<Marble> marbles;
 	
 	
-	public Hollow(Player owner, int marbleCount) {
+	public Hollow(Player owner) {
 		this.setOwner(owner);
 		this.marbles = new ArrayList<Marble>();
-		this.setMarbles(marbleCount);
 	}
 
-	public Hollow getPrev() {
-		return prev;
+	public Hollow getOpposite() {
+		return this.opposite;
 	}
 
-	public void setPrev(Hollow prev) {
-		this.prev = prev;
+	public void setOpposite(Hollow opposite) {
+		this.opposite = opposite;
 	}
 
 	public Hollow getNext() {
-		return next;
+		return this.next;
 	}
 
 	public void setNext(Hollow next) {
@@ -33,7 +32,7 @@ public class Hollow {
 	}
 
 	public Player getOwner() {
-		return owner;
+		return this.owner;
 	}
 
 	private void setOwner(Player owner) {
@@ -44,7 +43,7 @@ public class Hollow {
 		return this.marbles.size();
 	}
 	
-	private void setMarbles(int count) {
+	public void setMarbles(int count) {
 		marbles.clear();
 		for (int i = 0; i < count; i++) {
 			this.marbles.add(new Marble());
