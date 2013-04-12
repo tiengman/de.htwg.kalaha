@@ -1,5 +1,13 @@
 package de.htwg.kalaha;
 
-public class Kalaha {
+public final class Kalaha {
 	
+	private Kalaha() {
+		
+	}
+	
+	public static void main(String[] args) {
+		new Kalaha();
+	}
+
 }

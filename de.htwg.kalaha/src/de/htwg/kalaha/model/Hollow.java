@@ -1,6 +1,7 @@
 package de.htwg.kalaha.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hollow {
 
@@ -8,7 +9,7 @@ public class Hollow {
 	private Hollow next;
 	private Hollow prev;
 	private Player owner;
-	private ArrayList<Marble> marbles;
+	private List<Marble> marbles;
 	
 	
 	public Hollow(Player owner) {
@@ -63,8 +64,8 @@ public class Hollow {
 		marbles.add(marble);
 	}
 	
-	public ArrayList<Marble> getMarbles() {
-		ArrayList<Marble> marbleList = new ArrayList<Marble>();
+	public List<Marble> getMarbles() {
+		List<Marble> marbleList = new ArrayList<Marble>();
 		marbleList.addAll(marbles);
 		marbles.clear();
 		return marbleList;

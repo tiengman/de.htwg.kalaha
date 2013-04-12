@@ -1,6 +1,6 @@
 package de.htwg.kalaha.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -11,7 +11,7 @@ public class KalahaHollow extends Hollow {
 	}
 	
 	@Override
-	public ArrayList<Marble> getMarbles() {
+	public List<Marble> getMarbles() {
 		return null;
 	}
 }

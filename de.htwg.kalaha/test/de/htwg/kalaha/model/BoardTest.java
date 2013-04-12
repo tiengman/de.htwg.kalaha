@@ -2,7 +2,7 @@ package de.htwg.kalaha.model;
 
 import junit.framework.TestCase;
 
-public class BoardTest extends TestCase{
+public class BoardTest extends TestCase {
 	
 	Board board;
 	Player player1, player2;

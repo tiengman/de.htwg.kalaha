@@ -2,16 +2,18 @@ package de.htwg.kalaha.model;
 
 public class Board {
 	
-	Player player1, player2;
+	private static final int HOLLOW_NUMBER = 6;
 	
-	KalahaHollow player1Kalaha;
-	KalahaHollow player2Kalaha;
+	private Player player1, player2;
+	
+	private KalahaHollow player1Kalaha;
+	private KalahaHollow player2Kalaha;
 	
 	public Board(Player player1, Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
 		
-		generateHollows(6);
+		generateHollows(HOLLOW_NUMBER);
 			
 		//    2 2 2 2 2 2 
 		// (2)           (1)
@@ -73,13 +75,13 @@ public class Board {
 			current1.setOpposite(current2);
 			current2.setOpposite(current1);
 			
-		} while (current1 != current2);
+		} while (!current1.equals(current2));
 	}
 	
 	
 	public Hollow getHollow(Player player, int num)  {
 		Hollow current;
-		if (player == player1) {
+		if (player.equals(player1)) {
 			current = player2Kalaha;
 		} else {
 			current = player1Kalaha;

@@ -1,6 +1,6 @@
 package de.htwg.kalaha.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -46,7 +46,7 @@ public class HollowTest extends TestCase{
 	
 	public void testGetMarbles() {
 		hollow.addMarble(newMarble);
-		ArrayList<Marble> marbleList = hollow.getMarbles();
+		List<Marble> marbleList = hollow.getMarbles();
 		assertEquals(0, hollow.getMarbleCount());
 		assertEquals(1, marbleList.size());	
 		hollow.setMarbles(5);
