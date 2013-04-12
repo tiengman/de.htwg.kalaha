@@ -6,6 +6,7 @@ public class Hollow {
 
 	private Hollow opposite;
 	private Hollow next;
+	private Hollow prev;
 	private Player owner;
 	private ArrayList<Marble> marbles;
 	
@@ -29,6 +30,14 @@ public class Hollow {
 
 	public void setNext(Hollow next) {
 		this.next = next;
+	}
+	
+	public Hollow getPrev() {
+		return this.prev;
+	}
+	
+	public void setPrev(Hollow prev) {
+		this.prev = prev;
 	}
 
 	public Player getOwner() {

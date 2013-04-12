@@ -26,6 +26,11 @@ public class HollowTest extends TestCase{
 	}
 	
 	public void testGetNext() {
+		hollow.setPrev(hollowNext);
+		assertEquals(this.hollowNext, hollow.getPrev());
+	}
+	
+	public void testGetPrev() {
 		hollow.setNext(hollowNext);
 		assertEquals(this.hollowNext, hollow.getNext());
 	}
