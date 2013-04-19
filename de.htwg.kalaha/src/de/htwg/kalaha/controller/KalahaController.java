@@ -14,12 +14,18 @@ public class KalahaController extends Observable {
 	private Board board;
 	private Player player1, player2;
 	
+	/**
+	 * Instantiates a new kalaha controller.
+	 */
 	public KalahaController() {
 		this.player1 = new Player("Player 1");
 		this.player2 = new Player("Player 2");
 		this.board = new Board(this.player1,this.player2);	
 	}
 	
+	/**
+	 * Prepare the board for a new game.
+	 */
 	public void prepareNewGame() {
 		board.prepareBoard();
 		setStatusMessage("New game started");
@@ -27,6 +33,12 @@ public class KalahaController extends Observable {
 	}
 	
 	
+	/**
+	 * Take marbles out of a hollow and distribute them.
+	 *
+	 * @param playernum the player number
+	 * @param number the hollow number
+	 */
 	public void takeMarbles(int playernum, int number) {
 		Player player;
 		if (playernum == 1) {
@@ -51,12 +63,18 @@ public class KalahaController extends Observable {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is already empty");
 		}
 		
+		// Switch the active player after a turn
 		board.switchActivePlayer();
 		
 		notifyObservers();
 	}
 	
 	
+	/**
+	 * Gets the status message.
+	 *
+	 * @return the status message
+	 */
 	public String getStatus() {
 		return statusMessage;
 	}
@@ -65,6 +83,11 @@ public class KalahaController extends Observable {
 		this.statusMessage = statusMessage;
 	}
 	
+	/**
+	 * Gets the game board as a string.
+	 *
+	 * @return the game board as a string
+	 */
 	public String getBoardString() {
 		return board.toString();
 	}

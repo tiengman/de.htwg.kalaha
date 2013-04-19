@@ -19,6 +19,12 @@ public final class Board {
 	private List<Hollow> player1Hollows;
 	private List<Hollow> player2Hollows;
 	
+	/**
+	 * Instantiates a new game board.
+	 *
+	 * @param player1 the player 1
+	 * @param player2 the player 2
+	 */
 	public Board(Player player1, Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
