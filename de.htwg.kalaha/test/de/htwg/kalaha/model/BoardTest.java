@@ -50,6 +50,12 @@ public class BoardTest extends TestCase {
 	
 	public void testToString(){
 		assertNotNull(board.toString());
+		
+		board.getNextHollow(board.getHollow(player1, 6)).setMarbles(15);
+		board.switchActivePlayer();
+		board.getNextHollow(board.getHollow(player2, 6)).setMarbles(15);
+		
+		assertNotNull(board.toString());
 	}
 
 }
