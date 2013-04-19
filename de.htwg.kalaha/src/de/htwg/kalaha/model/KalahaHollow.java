@@ -3,7 +3,6 @@ package de.htwg.kalaha.model;
 import java.util.List;
 
 
-
 public class KalahaHollow extends Hollow {
 	
 	public KalahaHollow(Player owner) {

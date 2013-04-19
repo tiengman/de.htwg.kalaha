@@ -4,7 +4,7 @@ public class Player {
 	private String name;
 	
 	public Player(String name) {
-		setName(name);
+		this.name = name;
 	}
 	
 	public void setName(String name) {

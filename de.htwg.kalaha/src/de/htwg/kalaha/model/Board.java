@@ -1,98 +1,200 @@
 package de.htwg.kalaha.model;
 
-public class Board {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class Board {
 	
 	private static final int HOLLOW_NUMBER = 6;
+	private static final int START_MARBLES = 6;
+	
+	private static final int CHECK_NUM = 10;
 	
 	private Player player1, player2;
 	
+	private Player activePlayer;
+	
 	private KalahaHollow player1Kalaha;
 	private KalahaHollow player2Kalaha;
+	private List<Hollow> player1Hollows;
+	private List<Hollow> player2Hollows;
 	
 	public Board(Player player1, Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
 		
 		generateHollows(HOLLOW_NUMBER);
-			
-		//    2 2 2 2 2 2 
-		// (2)           (1)
-		//    1 1 1 1 1 1 
 		
+		prepareBoard();
 	}
 	
-	
-	private void generateHollows(int hollowCount) {
-		
+
+ 	private void generateHollows(int hollowCount) {
 		// Create Player Kalaha Hollows
 		player1Kalaha = new KalahaHollow(player1);
 		player2Kalaha = new KalahaHollow(player2);
 		
-		Hollow p1Current = null;
-		Hollow p2Current = null;
-		
-		
+		player1Hollows = new ArrayList<Hollow>();
+		player2Hollows = new ArrayList<Hollow>();
 		
 		for (int i = 0; i < hollowCount; i++) {
-			// Generate hollow
-			Hollow p1Next = new Hollow(player1);
-			Hollow p2Next = new Hollow(player2);
+			player1Hollows.add(new Hollow(player1));
+			player2Hollows.add(new Hollow(player2));
+		}	
+	}
+	
+	/**
+	 * Gets the opposite hollow.
+	 *
+	 * @param hollow the current hollow
+	 * @return the opposite hollow
+	 */
+	public Hollow getOppositeHollow(Hollow hollow) {		
+		if (player1Hollows.contains(hollow)) {
+			int oppNum = HOLLOW_NUMBER - player1Hollows.indexOf(hollow) - 1;
+			return player2Hollows.get(oppNum);
 			
-			if (i == 0) {
-				player2Kalaha.setNext(p1Next); 
-				player1Kalaha.setNext(p2Next);
-				p1Next.setPrev(player2Kalaha);
-				p2Next.setPrev(player1Kalaha);
-			} else {
-				// Link to next hollow
-				p1Current.setNext(p1Next);
-				p2Current.setNext(p2Next);
-				p1Next.setPrev(p1Current);
-				p2Next.setPrev(p2Current);
-			}
-			
-			p1Current = p1Next;
-			p2Current = p2Next;	
+		} else if (player2Hollows.contains(hollow)) {
+			int oppNum = HOLLOW_NUMBER - player2Hollows.indexOf(hollow) - 1;
+			return player1Hollows.get(oppNum);
 		}
 		
-		p1Current.setNext(player1Kalaha);
-		p2Current.setNext(player2Kalaha);
-		player1Kalaha.setPrev(p1Current);
-		player2Kalaha.setPrev(p2Current);
-		
-		linkOppositeHollows();
+		return null;
 	}
 	
-	private void linkOppositeHollows()  {
-		Hollow current1 = player1Kalaha;
-		Hollow current2 = player1Kalaha;
-		
-		do
-		{
-			current1 = current1.getNext();
-			current2 = current2.getPrev();
-			
-			current1.setOpposite(current2);
-			current2.setOpposite(current1);
-			
-		} while (!current1.equals(current2));
-	}
-	
-	
+	/**
+	 * Gets the hollow by player and hollow number.
+	 *
+	 * @param player the player
+	 * @param num the hollow number
+	 * @return the hollow
+	 */
 	public Hollow getHollow(Player player, int num)  {
-		Hollow current;
 		if (player.equals(player1)) {
-			current = player2Kalaha;
+			return player1Hollows.get(num - 1);
+		} else if (player.equals(player2)) {
+			return player2Hollows.get(num - 1);
+		}
+		
+	   return null;
+	}
+	
+	public Hollow getNextHollow(Hollow current)  {
+		if (current.equals(player1Kalaha)) {
+			return player2Hollows.get(0);
+		}
+		
+		if (current.equals(player2Kalaha)) {
+			return player1Hollows.get(0);	
+		}
+		
+		if (player1Hollows.contains(current)) {
+			int index = player1Hollows.indexOf(current);
+			if (index == HOLLOW_NUMBER - 1) {
+				if (activePlayer.equals(player2)) {
+					return  player2Hollows.get(0);
+				} else {
+					return player1Kalaha;
+				}
+			}
+			else {
+				return player1Hollows.get(index + 1);
+			}
+		} 
+		
+		if (player2Hollows.contains(current)) {
+			int index = player2Hollows.indexOf(current);
+			if (index == HOLLOW_NUMBER - 1) {
+				if (activePlayer.equals(player1)) {
+					return  player1Hollows.get(0);
+				} else {
+					return player2Kalaha;
+				}
+			}
+			else {
+				return player2Hollows.get(index + 1);
+			}
+		} 
+
+		return null;
+	}
+	
+	public void switchActivePlayer() {
+		if (activePlayer.equals(player1)) {
+			activePlayer = player2;
 		} else {
-			current = player1Kalaha;
+			activePlayer = player1;
 		}
-		
-		for (int i = 0; i < num; i++) {
-			current = current.getNext();
+	}
+	
+	public Player getActivePlayer() {
+		return activePlayer;
+	}
+	
+	
+	private void fillHollows(int count) {
+		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+			getHollow(player1, i).setMarbles(count);
+			getHollow(player2, i).setMarbles(count);
 		}
+	}
+	
+	public void prepareBoard() {
+		activePlayer = this.player1;
+		player1Kalaha.setMarbles(0);
+		player2Kalaha.setMarbles(0);
+		fillHollows(START_MARBLES);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Active Player: " + getActivePlayer().getName() + "\n\n");
 		
+		// Line 1
+		sb.append("\t ____\t");
+		for (int i = HOLLOW_NUMBER; i >= 1; i--) {
+			sb.append("p2," + i + "\t");
+		}
+		sb.append(" ____\n");
 		
-		return current;
+		// Line 2
+		sb.append("\t|    |");
+		for (int i = HOLLOW_NUMBER; i >= 1; i--) {
+			sb.append("\t[" +  getHollow(player2,i).getMarbleCount() + "]");
+		}
+		sb.append("\t|    |\n");
+		
+		// Line 3
+		sb.append("\t| " + player2Kalaha.getMarbleCount());
+		if (player2Kalaha.getMarbleCount() < CHECK_NUM) {
+			sb.append(" ");
+		}
+		sb.append(" |\t");
+		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+			sb.append("\t");
+		}
+		sb.append("| " + player1Kalaha.getMarbleCount());
+		if (player1Kalaha.getMarbleCount() < CHECK_NUM) {
+			sb.append(" ");
+		}
+		sb.append(" |\n");
+		
+		// Line 4
+		sb.append("\t|____|");
+		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+			sb.append("\t[" + getHollow(player1,i).getMarbleCount() + "]");
+		}
+		sb.append("\t|____|\n");
+		
+		// Line 5
+		sb.append("\t  P2\t");
+		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+			sb.append("p1," + i + "\t");
+		}
+		sb.append("  P1\n");
+		
+		return sb.toString();
 	}
 	
 	

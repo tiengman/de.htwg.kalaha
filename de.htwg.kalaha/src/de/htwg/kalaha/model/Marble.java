@@ -1,11 +1,12 @@
 package de.htwg.kalaha.model;
 
 public class Marble {
-	public static enum MarbleType {BONE,DIAMOND,MARBLE,STICK,STONE};
+	public static enum MarbleType {BONE,DIAMOND,MARBLE,SEED,STICK,STONE};
 	
 	private MarbleType type;
 	
 	public Marble() {
+		this.type = MarbleType.MARBLE;
 		
 	}
 

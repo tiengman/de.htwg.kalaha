@@ -26,24 +26,24 @@ public class ObservableTest extends TestCase {
 
 	
 	public void testNotify() {
-		assert(!ping);
+		assertFalse(ping);
 		testObservable.notifyObservers();
-		assert(ping);
+		assertTrue(ping);
 	}
 	
 	
 	public void testRemove() {
-		assert(!ping);
+		assertFalse(ping);
 		testObservable.removeObserver(testObserver);
 		testObservable.notifyObservers();
-		assert(!ping);
+		assertFalse(ping);
 	}
 	
 	public void testRemoveAll() {
-		assert(!ping);
+		assertFalse(ping);
 		testObservable.removeAllObservers();
 		testObservable.notifyObservers();
-		assert(!ping);
+		assertFalse(ping);
 	}
 
 }

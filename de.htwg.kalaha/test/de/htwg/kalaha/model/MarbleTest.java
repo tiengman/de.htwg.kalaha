@@ -11,8 +11,10 @@ public class MarbleTest extends TestCase {
 	}
 	
 	public void testGetType() {
+		assertEquals(marble.getType(),MarbleType.MARBLE);
 		marble.setType(MarbleType.STONE);
 		assertEquals(marble.getType(),MarbleType.STONE);
+		assertEquals(MarbleType.valueOf("BONE"),MarbleType.BONE);
 	}
 	
 	
