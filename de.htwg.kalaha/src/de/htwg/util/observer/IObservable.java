@@ -1,6 +1,6 @@
 package de.htwg.util.observer;
 
-// Imported from htwg.se.sudoku by markoboger
+// Imported from htwg.se.sudoku (markoboger)
 
 public interface IObservable {
 

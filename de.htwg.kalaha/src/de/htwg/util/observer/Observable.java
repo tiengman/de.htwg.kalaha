@@ -1,6 +1,6 @@
 package de.htwg.util.observer;
 
-// Imported from htwg.se.sudoku by markoboger
+// Imported from htwg.se.sudoku (markoboger)
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,7 +26,6 @@ public class Observable implements IObservable {
 		notifyObservers(null);
 	}
 
-	@Override
 	public void notifyObservers(Event e) {
 		for ( Iterator<IObserver> iter = subscribers.iterator(); iter.hasNext();) {
 			IObserver observer = iter.next();

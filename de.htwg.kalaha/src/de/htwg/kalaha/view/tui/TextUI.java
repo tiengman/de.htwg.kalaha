@@ -19,7 +19,6 @@ public class TextUI implements IObserver {
 		scanner = new Scanner (System.in);	
 	}
 
-	@Override
 	public void update(Event e) {
 		printTUI();
 	}
