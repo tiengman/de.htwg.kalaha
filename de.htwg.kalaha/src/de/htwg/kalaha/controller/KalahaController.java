@@ -77,13 +77,14 @@ public class KalahaController extends Observable {
 	}
 	
 	public void catchMarbles(Hollow current) {
-		if (current.getMarbleCount() == 1 && current.getOwner() == board.getActivePlayer()) {
-			KalahaHollow  playerKalaha = board.getKalaha(board.getActivePlayer());
-			if (!current.equals(playerKalaha) && !board.getOppositeHollow(current).isEmpty()) {
-				List<Marble> marbles = board.getOppositeHollow(current).getMarbles();
-				marbles.addAll(current.getMarbles());
-				playerKalaha.addMarbles(marbles);
-			}	
+		KalahaHollow  playerKalaha = board.getKalaha(board.getActivePlayer());
+		if (!current.equals(playerKalaha)) {
+		if (current.getMarbleCount() == 1 && current.getOwner() == board.getActivePlayer() &&
+               !board.getOppositeHollow(current).isEmpty()) {
+			List<Marble> marbles = board.getOppositeHollow(current).getMarbles();
+			marbles.addAll(current.getMarbles());
+			playerKalaha.addMarbles(marbles);
+		}
 		}
 	}
 	

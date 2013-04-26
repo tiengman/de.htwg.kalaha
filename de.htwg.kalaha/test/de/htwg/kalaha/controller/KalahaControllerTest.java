@@ -28,8 +28,15 @@ public class KalahaControllerTest extends TestCase {
     	controller.takeMarbles(1, 6);
     	assertEquals(controller.getStatus(), "The hollow p1,6 is now empty");    	
     	controller.takeMarbles(2, 6);
-    	assertEquals(controller.getStatus(), "The hollow p2,6 is already empty");  
+    	assertEquals(controller.getStatus(), "The hollow p2,6 is already empty"); 
     	
+    	// Opposite already empty
+    	controller.takeMarbles(1, 5);
+    	assertEquals(controller.getStatus(), "The hollow p1,5 is now empty");  
+    	controller.takeMarbles(2, 6);
+    	assertEquals(controller.getStatus(), "The hollow p2,6 is now empty");
+    	controller.takeMarbles(1, 1);
+    	assertEquals(controller.getStatus(), "The hollow p1,1 is now empty"); 
     	
     	controller.takeMarbles(2, 1);
     	assertEquals(controller.getStatus(), "The hollow p2,1 is now empty");
