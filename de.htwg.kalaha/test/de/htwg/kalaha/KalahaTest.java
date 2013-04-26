@@ -1,6 +1,5 @@
 package de.htwg.kalaha;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -15,18 +14,7 @@ public class KalahaTest extends TestCase {
 		
 	}
 	
-	public void testNew() {
-		InputStream stdin = System.in;
 
-		String data = "q\n";
-		System.setIn(new ByteArrayInputStream(data.getBytes()));
-
-		Kalaha k = new Kalaha();
-		
-		assertNotNull(k);
-			
-		System.setIn(stdin);
-	}
 	
 	public void testMain()
 	{
