@@ -85,6 +85,23 @@ public final class Board {
 	   return null;
 	}
 	
+	/**
+	 * Gets the kalaha of the player.
+	 *
+	 * @param player the player
+	 * @return the kalaha
+	 */
+	public KalahaHollow getKalaha(Player player)  {
+		if (player.equals(player1)) {
+			return player1Kalaha;
+		} else if (player.equals(player2)) {
+			return player2Kalaha;
+		}
+		
+	   return null;
+	}
+	
+	
 	public Hollow getNextHollow(Hollow current)  {
 		if (current.equals(player1Kalaha)) {
 			return player2Hollows.get(0);

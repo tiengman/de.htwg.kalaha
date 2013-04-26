@@ -24,7 +24,7 @@ public final class Kalaha {
 	public static void main(String[] args) {
 		// Set up logging through log4j
 		PropertyConfigurator.configure("log4j.properties");
-
+		
 		new Kalaha();
 	}
 

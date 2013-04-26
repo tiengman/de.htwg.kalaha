@@ -40,6 +40,14 @@ public class BoardTest extends TestCase {
 		assertEquals(board.getNextHollow(board.getNextHollow(board.getHollow(player2, 6))), board.getHollow(player1, 1));
 	}
 	
+	public void testGetKalaha() {
+		assertEquals(board.getNextHollow(board.getHollow(player1, 6)), board.getKalaha(player1));
+		board.switchActivePlayer();
+		assertEquals(board.getNextHollow(board.getHollow(player2, 6)), board.getKalaha(player2));
+		Player somebody = new Player("Someone else");
+		assertNull(board.getKalaha(somebody));
+	}
+	
 	public void testSwitchActivePlayer() {
 		assertEquals(player1,board.getActivePlayer());
 		board.switchActivePlayer();

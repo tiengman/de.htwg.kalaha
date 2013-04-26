@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.htwg.kalaha.model.Board;
 import de.htwg.kalaha.model.Hollow;
+import de.htwg.kalaha.model.KalahaHollow;
 import de.htwg.kalaha.model.Marble;
 import de.htwg.kalaha.model.Player;
 import de.htwg.util.observer.Observable;
@@ -59,15 +60,33 @@ public class KalahaController extends Observable {
 				marbles.remove(0);
 			}
 			setStatusMessage("The hollow p" + playernum + "," + number + " is now empty");
+			catchMarbles(current);
+			
+			// Switch the active player after a turn
+			board.switchActivePlayer();
 		} else {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is already empty");
 		}
 		
-		// Switch the active player after a turn
-		board.switchActivePlayer();
+		
+		
+		
+		
 		
 		notifyObservers();
 	}
+	
+	public void catchMarbles(Hollow current) {
+		if (current.getMarbleCount() == 1 && current.getOwner() == board.getActivePlayer()) {
+			KalahaHollow  playerKalaha = board.getKalaha(board.getActivePlayer());
+			if (!current.equals(playerKalaha) && !board.getOppositeHollow(current).isEmpty()) {
+				List<Marble> marbles = board.getOppositeHollow(current).getMarbles();
+				marbles.addAll(current.getMarbles());
+				playerKalaha.addMarbles(marbles);
+			}	
+		}
+	}
+	
 	
 	
 	/**

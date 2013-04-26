@@ -79,6 +79,15 @@ public class Hollow {
 	}
 	
 	/**
+	 * Adds all marbles into the hollow.
+	 *
+	 * @param marble the marbles
+	 */
+	public void addMarbles(List<Marble> newMarbles) {
+		marbles.addAll(newMarbles);
+	}
+	
+	/**
 	 * Gets the marbles out of the hollow and clears the hollow.
 	 *
 	 * @return the marbles list
