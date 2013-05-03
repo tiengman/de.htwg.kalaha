@@ -62,17 +62,13 @@ public class KalahaController extends Observable {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is now empty");
 			catchMarbles(current);
 			
-			// Switch the active player after a turn
-			board.switchActivePlayer();
+			checkExtraTurn(current);
+			
+			
 		} else {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is already empty");
 		}
-		
-		
-		
-		
-		
-		
+
 		notifyObservers();
 	}
 	
@@ -87,6 +83,17 @@ public class KalahaController extends Observable {
 
 		}
 	}
+	
+	public void checkExtraTurn(Hollow current) {
+		KalahaHollow  playerKalaha = board.getKalaha(board.getActivePlayer());
+		
+		if (!current.equals(playerKalaha)) {
+			// Switch the active player after a turn
+			board.switchActivePlayer();
+		}
+	}
+	
+	
 	
 	
 	
