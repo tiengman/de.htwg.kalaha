@@ -18,10 +18,10 @@ public class KalahaController extends Observable {
 	/**
 	 * Instantiates a new kalaha controller.
 	 */
-	public KalahaController(int hollowCount) {
+	public KalahaController(int hollowCount, int startMarbles) {
 		this.player1 = new Player("Player 1");
 		this.player2 = new Player("Player 2");
-		this.board = new Board(this.player1,this.player2, hollowCount);	
+		this.board = new Board(this.player1,this.player2, hollowCount, startMarbles);	
 		board.prepareBoard();
 	}
 	
@@ -50,8 +50,9 @@ public class KalahaController extends Observable {
 		}
 		
 		Hollow hollow = board.getHollow(player, number);
-		
-		if (!hollow.isEmpty()) {
+		if (!player.equals(board.getActivePlayer())) {
+			setStatusMessage("You are not allowed to take the marbles of the hollow p" + playernum + "," + number);
+		} else if (!hollow.isEmpty()) {
 			List<Marble> marbles = hollow.getMarbles();
 			Hollow current = hollow;
 			int count = marbles.size();

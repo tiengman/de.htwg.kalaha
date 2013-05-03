@@ -1,5 +1,8 @@
 package de.htwg.kalaha.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 public class BoardTest extends TestCase {
@@ -10,7 +13,7 @@ public class BoardTest extends TestCase {
 	public void setUp() {
 		player1 = new Player("Player 1");
 		player2 = new Player("Player 2");
-		board = new Board(player1,player2, 6);
+		board = new Board(player1,player2, 6,6);
 	}
 	
 	
@@ -66,7 +69,7 @@ public class BoardTest extends TestCase {
 	}
 	
 	public void testIsWinSituation() {
-		board = new Board(player1,player2, 1);
+		board = new Board(player1,player2, 1,6);
 		
 		board.getKalaha(player1).setMarbles(7);
 		board.getKalaha(player2).setMarbles(3);
@@ -100,7 +103,7 @@ public class BoardTest extends TestCase {
 		assertFalse(board.isWinSituation());
 	}
 	
-	public void testToString(){
+	public void testToString() {
 		assertNotNull(board.toString());
 		
 		board.getNextHollow(board.getHollow(player1, 6)).setMarbles(15);
@@ -109,5 +112,47 @@ public class BoardTest extends TestCase {
 		
 		assertNotNull(board.toString());
 	}
+	
+	public void testGetHollowMarbles() {
+		board = new Board(player1,player2, 2,6);
+		List<Marble> marbles = board.getHollowsMarbles(player1);
+		assertEquals(marbles.size(), 0);
+		
+		board.getHollow(player2, 1).setMarbles(6);
+		board.getHollow(player2, 2).setMarbles(8);
+		marbles = board.getHollowsMarbles(player2);
+		assertEquals(marbles.size(), 14);
+		
+		
+	}
+	
+	public void testGetWinner() {
+		board = new Board(player1,player2, 1,6);
+		
+		board.getKalaha(player1).setMarbles(6);
+		board.getKalaha(player2).setMarbles(8);
+		assertEquals(board.getWinner(), player2);
+		
+		board.getKalaha(player1).setMarbles(10);
+		board.getKalaha(player2).setMarbles(5);
+		assertEquals(board.getWinner(), player1);
+		
+		board.getKalaha(player1).setMarbles(5);
+		board.getKalaha(player2).setMarbles(5);
+		assertNull(board.getWinner());
+		
+	}
+	
+	public void testCleanBoard() {
+		board = new Board(player1,player2, 1,1);
+		board.getHollow(player1, 1).setMarbles(3);
+		board.getHollow(player2, 1).setMarbles(4);
+		
+		board.cleanBoard();
+
+		assertEquals(board.getKalaha(player1).getMarbleCount(),3);
+		assertEquals(board.getKalaha(player2).getMarbleCount(),4);
+	}
+
 
 }

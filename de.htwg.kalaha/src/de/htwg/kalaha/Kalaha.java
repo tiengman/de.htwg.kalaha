@@ -7,14 +7,15 @@ import de.htwg.kalaha.view.tui.TextUI;
 
 public final class Kalaha {
 	
-	private static final int HOLLOW_NUMBER = 1;
+	private static final int HOLLOW_NUMBER = 6;
+	private static final int START_MARBLES = 2;
 
 	private Kalaha() {
 		kalahaTui();
 	}
 	
 	private static void kalahaTui() {
-		TextUI tui = new TextUI(new KalahaController(HOLLOW_NUMBER));
+		TextUI tui = new TextUI(new KalahaController(HOLLOW_NUMBER,START_MARBLES));
 		tui.printTUI();
 		// continue until the user decides to quit
 		boolean quit = false;

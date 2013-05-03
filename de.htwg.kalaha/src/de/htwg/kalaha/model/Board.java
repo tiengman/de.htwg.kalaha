@@ -5,8 +5,6 @@ import java.util.List;
 
 public final class Board {
 	
-	private static final int START_MARBLES = 6;
-	
 	private static final int CHECK_NUM = 10;
 	
 	private Player player1, player2;
@@ -17,6 +15,7 @@ public final class Board {
 	private KalahaHollow player2Kalaha;
 	private List<Hollow> player1Hollows;
 	private List<Hollow> player2Hollows;
+	private int startMarbles;
 
 	
 	/**
@@ -25,9 +24,10 @@ public final class Board {
 	 * @param player1 the player 1
 	 * @param player2 the player 2
 	 */
-	public Board(Player player1, Player player2, int hollowCount) {
+	public Board(Player player1, Player player2, int hollowCount, int startMarbles) {
 		this.player1 = player1;
 		this.player2 = player2;
+		this.startMarbles = startMarbles;
 		
 		activePlayer = this.player1;
 		generateHollows(hollowCount);
@@ -100,7 +100,7 @@ public final class Board {
 	}
 	
 	public boolean isWinSituation() {
-		int halfMarbles = getHollowCount() * START_MARBLES;
+		int halfMarbles = getHollowCount() * this.startMarbles;
 		
 		return player1Kalaha.getMarbleCount() > halfMarbles || player2Kalaha.getMarbleCount() > halfMarbles
 			|| arePlayerHollowsEmpty(player1) || arePlayerHollowsEmpty(player2);
@@ -213,7 +213,7 @@ public final class Board {
 		activePlayer = this.player1;
 		player1Kalaha.setMarbles(0);
 		player2Kalaha.setMarbles(0);
-		fillHollows(START_MARBLES);
+		fillHollows(this.startMarbles);
 	}
 	
 	@Override
