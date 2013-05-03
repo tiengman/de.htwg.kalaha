@@ -62,6 +62,8 @@ public class TextUI implements IObserver {
 			controller.takeMarbles(arg[0], arg[1]);
 		}
 		
+		controller.checkWinSituation();
+		
 		return quit;
 	}
 

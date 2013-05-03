@@ -6,13 +6,15 @@ import de.htwg.kalaha.controller.KalahaController;
 import de.htwg.kalaha.view.tui.TextUI;
 
 public final class Kalaha {
+	
+	private static final int HOLLOW_NUMBER = 1;
 
 	private Kalaha() {
 		kalahaTui();
 	}
 	
 	private static void kalahaTui() {
-		TextUI tui = new TextUI(new KalahaController());
+		TextUI tui = new TextUI(new KalahaController(HOLLOW_NUMBER));
 		tui.printTUI();
 		// continue until the user decides to quit
 		boolean quit = false;

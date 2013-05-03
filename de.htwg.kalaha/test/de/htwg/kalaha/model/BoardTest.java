@@ -10,7 +10,7 @@ public class BoardTest extends TestCase {
 	public void setUp() {
 		player1 = new Player("Player 1");
 		player2 = new Player("Player 2");
-		board = new Board(player1,player2);
+		board = new Board(player1,player2, 6);
 	}
 	
 	
@@ -54,6 +54,50 @@ public class BoardTest extends TestCase {
 		assertEquals(player2,board.getActivePlayer());
 		board.switchActivePlayer();
 		assertEquals(player1,board.getActivePlayer());
+	}
+	
+	public void testArePlayerHollowsEmpty() {
+		// Board is empty
+		assertTrue(board.arePlayerHollowsEmpty(player1));
+		
+		// Fill board
+		board.prepareBoard();
+		assertFalse(board.arePlayerHollowsEmpty(player1));
+	}
+	
+	public void testIsWinSituation() {
+		board = new Board(player1,player2, 1);
+		
+		board.getKalaha(player1).setMarbles(7);
+		board.getKalaha(player2).setMarbles(3);
+		board.getHollow(player1, 1).setMarbles(1);
+		board.getHollow(player2, 1).setMarbles(1);
+		assertTrue(board.isWinSituation());
+		
+		board.getKalaha(player1).setMarbles(3);
+		board.getKalaha(player2).setMarbles(7);
+		board.getHollow(player1, 1).setMarbles(1);
+		board.getHollow(player2, 1).setMarbles(1);
+		assertTrue(board.isWinSituation());
+		
+		board.getKalaha(player1).setMarbles(0);
+		board.getKalaha(player2).setMarbles(0);
+		board.getHollow(player1, 1).setMarbles(12);
+		board.getHollow(player2, 1).setMarbles(0);
+		assertTrue(board.isWinSituation());
+		
+		board.getKalaha(player1).setMarbles(0);
+		board.getKalaha(player2).setMarbles(0);
+		board.getHollow(player1, 1).setMarbles(0);
+		board.getHollow(player2, 1).setMarbles(12);
+		assertTrue(board.isWinSituation());
+		
+		
+		board.getKalaha(player1).setMarbles(0);
+		board.getKalaha(player2).setMarbles(0);
+		board.getHollow(player1, 1).setMarbles(6);
+		board.getHollow(player2, 1).setMarbles(6);
+		assertFalse(board.isWinSituation());
 	}
 	
 	public void testToString(){

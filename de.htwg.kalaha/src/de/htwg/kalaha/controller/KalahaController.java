@@ -18,10 +18,11 @@ public class KalahaController extends Observable {
 	/**
 	 * Instantiates a new kalaha controller.
 	 */
-	public KalahaController() {
+	public KalahaController(int hollowCount) {
 		this.player1 = new Player("Player 1");
 		this.player2 = new Player("Player 2");
-		this.board = new Board(this.player1,this.player2);	
+		this.board = new Board(this.player1,this.player2, hollowCount);	
+		board.prepareBoard();
 	}
 	
 	/**
@@ -62,8 +63,11 @@ public class KalahaController extends Observable {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is now empty");
 			catchMarbles(current);
 			
-			checkExtraTurn(current);
 			
+
+			takeAllMarbles();
+			
+			checkExtraTurn(current);	
 			
 		} else {
 			setStatusMessage("The hollow p" + playernum + "," + number + " is already empty");
@@ -93,8 +97,34 @@ public class KalahaController extends Observable {
 		}
 	}
 	
+	public void takeAllMarbles() {
+		Player player = board.getActivePlayer();
+		   
+		if (board.arePlayerHollowsEmpty(player))
+		{
+			board.switchActivePlayer();
+		    player = board.getActivePlayer();
+		    
+			
+			KalahaHollow kalaha = board.getKalaha(player);
+		    kalaha.addMarbles(board.getHollowsMarbles(player));
+		    board.switchActivePlayer();
+		}
+	}
 	
-	
+	public void checkWinSituation() {
+		if (board.isWinSituation()) {
+			board.cleanBoard();
+			if (player1.equals(board.getWinner())) {
+				setStatusMessage("Player 1 wins the game!");
+			} else if (player2.equals(board.getWinner())) {
+				setStatusMessage("Player 2 wins the game!");
+			} else {
+				setStatusMessage("Draw!");
+			}
+			notifyObservers();
+		}
+	}
 	
 	
 	/**

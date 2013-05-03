@@ -6,7 +6,7 @@ public class KalahaControllerTest extends TestCase {
     KalahaController controller;
     
 	public void setUp() {
-		controller = new KalahaController();
+		controller = new KalahaController(6);
 	}
 	
     public void testPrepareNewGame() {
@@ -58,6 +58,25 @@ public class KalahaControllerTest extends TestCase {
     	controller.takeMarbles(2, 6);
     	assertEquals(controller.getStatus(), "The hollow p2,6 is now empty");
     	
+    }
+    
+    public void testWinSituation() {
+    	controller = new KalahaController(1);
+    	controller.takeMarbles(1, 1);
+    	controller.takeMarbles(1, 1);
+    	controller.checkWinSituation();
+    	assertEquals(controller.getStatus(), "Player 2 wins the game!"); 
+    	
+    	controller = new KalahaController(1);
+    	controller.takeMarbles(2, 1);
+    	controller.takeMarbles(2, 1);
+    	controller.takeMarbles(2, 1);
+    	controller.checkWinSituation();
+    	assertEquals(controller.getStatus(), "Player 1 wins the game!"); 
+    	
+    	controller = new KalahaController(0);
+    	controller.checkWinSituation();
+    	assertEquals(controller.getStatus(), "Draw!"); 
     }
 	
 	

@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 public class TextUITest extends TestCase {
 	TextUI tui;
 	public void setUp() {
-		tui = new TextUI(new KalahaController());
+		tui = new TextUI(new KalahaController(6));
 	}
 	
 	public void testHandleInputOrQuit() {
@@ -24,12 +24,12 @@ public class TextUITest extends TestCase {
 
 		String data = "q\n";
 		System.setIn(new ByteArrayInputStream(data.getBytes()));
-		tui = new TextUI(new KalahaController());
+		tui = new TextUI(new KalahaController(6));
 		assertTrue(tui.iterate());
 			
 		data = "n\n";
 		System.setIn(new ByteArrayInputStream(data.getBytes()));
-		tui = new TextUI(new KalahaController());
+		tui = new TextUI(new KalahaController(6));
 		assertFalse(tui.iterate());
 			
 		System.setIn(stdin);

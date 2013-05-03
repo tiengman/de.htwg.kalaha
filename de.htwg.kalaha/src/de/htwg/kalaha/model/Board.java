@@ -5,7 +5,6 @@ import java.util.List;
 
 public final class Board {
 	
-	private static final int HOLLOW_NUMBER = 6;
 	private static final int START_MARBLES = 6;
 	
 	private static final int CHECK_NUM = 10;
@@ -18,6 +17,7 @@ public final class Board {
 	private KalahaHollow player2Kalaha;
 	private List<Hollow> player1Hollows;
 	private List<Hollow> player2Hollows;
+
 	
 	/**
 	 * Instantiates a new game board.
@@ -25,13 +25,16 @@ public final class Board {
 	 * @param player1 the player 1
 	 * @param player2 the player 2
 	 */
-	public Board(Player player1, Player player2) {
+	public Board(Player player1, Player player2, int hollowCount) {
 		this.player1 = player1;
 		this.player2 = player2;
 		
-		generateHollows(HOLLOW_NUMBER);
-		
-		prepareBoard();
+		activePlayer = this.player1;
+		generateHollows(hollowCount);
+	}
+	
+	private int getHollowCount() {
+		return player1Hollows.size();
 	}
 	
 
@@ -57,11 +60,11 @@ public final class Board {
 	 */
 	public Hollow getOppositeHollow(Hollow hollow) {		
 		if (player1Hollows.contains(hollow)) {
-			int oppNum = HOLLOW_NUMBER - player1Hollows.indexOf(hollow) - 1;
+			int oppNum = getHollowCount() - player1Hollows.indexOf(hollow) - 1;
 			return player2Hollows.get(oppNum);
 			
 		} else if (player2Hollows.contains(hollow)) {
-			int oppNum = HOLLOW_NUMBER - player2Hollows.indexOf(hollow) - 1;
+			int oppNum = getHollowCount() - player2Hollows.indexOf(hollow) - 1;
 			return player1Hollows.get(oppNum);
 		}
 		
@@ -83,6 +86,50 @@ public final class Board {
 		}
 		
 	   return null;
+	}
+	
+	
+	public List<Marble> getHollowsMarbles(Player player)  {
+		List<Marble> marbles = new ArrayList<Marble>();
+		
+		for (int i = 1; i <= getHollowCount(); i++) {
+			marbles.addAll(getHollow(player,i).getMarbles());
+		}
+		
+	   return marbles;
+	}
+	
+	public boolean isWinSituation() {
+		int halfMarbles = getHollowCount() * START_MARBLES;
+		
+		return player1Kalaha.getMarbleCount() > halfMarbles || player2Kalaha.getMarbleCount() > halfMarbles
+			|| arePlayerHollowsEmpty(player1) || arePlayerHollowsEmpty(player2);
+	}
+	
+	public Player getWinner() {
+		if (player1Kalaha.getMarbleCount() > player2Kalaha.getMarbleCount()) {
+			return player1;
+		} else if (player2Kalaha.getMarbleCount() > player1Kalaha.getMarbleCount()) {
+			return player2;
+		}
+		return null;	
+	}
+	
+	public void cleanBoard() {
+		getKalaha(player1).addMarbles(getHollowsMarbles(player1));
+		getKalaha(player2).addMarbles(getHollowsMarbles(player2));
+	}
+	
+	
+	
+	public boolean arePlayerHollowsEmpty(Player player) {
+		for (int i = 1; i <= getHollowCount(); i++) {
+			if (!getHollow(player, i).isEmpty()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 	
 	/**
@@ -113,7 +160,7 @@ public final class Board {
 		
 		if (player1Hollows.contains(current)) {
 			int index = player1Hollows.indexOf(current);
-			if (index == HOLLOW_NUMBER - 1) {
+			if (index == getHollowCount() - 1) {
 				if (activePlayer.equals(player2)) {
 					return  player2Hollows.get(0);
 				} else {
@@ -127,7 +174,7 @@ public final class Board {
 		
 		if (player2Hollows.contains(current)) {
 			int index = player2Hollows.indexOf(current);
-			if (index == HOLLOW_NUMBER - 1) {
+			if (index == getHollowCount() - 1) {
 				if (activePlayer.equals(player1)) {
 					return  player1Hollows.get(0);
 				} else {
@@ -156,7 +203,7 @@ public final class Board {
 	
 	
 	private void fillHollows(int count) {
-		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+		for (int i = 1; i <= getHollowCount(); i++) {
 			getHollow(player1, i).setMarbles(count);
 			getHollow(player2, i).setMarbles(count);
 		}
@@ -176,14 +223,14 @@ public final class Board {
 		
 		// Line 1
 		sb.append("\t ____\t");
-		for (int i = HOLLOW_NUMBER; i >= 1; i--) {
+		for (int i = getHollowCount(); i >= 1; i--) {
 			sb.append("p2," + i + "\t");
 		}
 		sb.append(" ____\n");
 		
 		// Line 2
 		sb.append("\t|    |");
-		for (int i = HOLLOW_NUMBER; i >= 1; i--) {
+		for (int i = getHollowCount(); i >= 1; i--) {
 			sb.append("\t[" +  getHollow(player2,i).getMarbleCount() + "]");
 		}
 		sb.append("\t|    |\n");
@@ -194,7 +241,7 @@ public final class Board {
 			sb.append(" ");
 		}
 		sb.append(" |\t");
-		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+		for (int i = 1; i <= getHollowCount(); i++) {
 			sb.append("\t");
 		}
 		sb.append("| " + player1Kalaha.getMarbleCount());
@@ -205,14 +252,14 @@ public final class Board {
 		
 		// Line 4
 		sb.append("\t|____|");
-		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+		for (int i = 1; i <= getHollowCount(); i++) {
 			sb.append("\t[" + getHollow(player1,i).getMarbleCount() + "]");
 		}
 		sb.append("\t|____|\n");
 		
 		// Line 5
 		sb.append("\t  P2\t");
-		for (int i = 1; i <= HOLLOW_NUMBER; i++) {
+		for (int i = 1; i <= getHollowCount(); i++) {
 			sb.append("p1," + i + "\t");
 		}
 		sb.append("  P1\n");
