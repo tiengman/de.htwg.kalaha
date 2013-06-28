@@ -3,8 +3,7 @@ package de.htwg.kalaha.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Board {
-	
+public final class Board implements Cloneable {
 	private static final int CHECK_NUM = 10;
 	
 	private Player player1, player2;
@@ -16,6 +15,7 @@ public final class Board {
 	private List<Hollow> player1Hollows;
 	private List<Hollow> player2Hollows;
 	private int startMarbles;
+	private int hollowCount;
 
 	
 	/**
@@ -28,9 +28,42 @@ public final class Board {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.startMarbles = startMarbles;
+		this.hollowCount = hollowCount;
 		
 		activePlayer = this.player1;
 		generateHollows(hollowCount);
+	}
+	
+	public int getHollowNumber(Hollow hollow) {	
+		List<Hollow> playerHollows = new ArrayList<Hollow>();
+		if (hollow.getOwner().equals(player1)) {
+			playerHollows = player1Hollows;
+		} else {
+			playerHollows = player2Hollows;
+		}
+		return playerHollows.indexOf(hollow) + 1;
+	}
+	
+	public Board getClone() {
+		Board newBoard = new Board(player1, player2, hollowCount, startMarbles);
+		if (activePlayer.equals(player2)) {
+			newBoard.switchActivePlayer();
+		}
+		// Copy Kalahas
+	    int tmp = getKalaha(player1).getMarbleCount();
+	    newBoard.getKalaha(player1).setMarbles(tmp);
+	    tmp = getKalaha(player2).getMarbleCount();
+	    newBoard.getKalaha(player2).setMarbles(tmp);
+	    
+	    // Copy Hollows
+	    for (int i=0; i < player1Hollows.size(); i++) {
+	    	tmp = player1Hollows.get(i).getMarbleCount();
+	    	newBoard.getHollow(player1, i + 1).setMarbles(tmp);
+	    	tmp = player2Hollows.get(i).getMarbleCount();
+	    	newBoard.getHollow(player2, i + 1).setMarbles(tmp);
+	    }
+	    
+	    return newBoard;
 	}
 	
 	private int getHollowCount() {
@@ -121,7 +154,6 @@ public final class Board {
 	}
 	
 	
-	
 	public boolean arePlayerHollowsEmpty(Player player) {
 		for (int i = 1; i <= getHollowCount(); i++) {
 			if (!getHollow(player, i).isEmpty()) {
@@ -203,9 +235,27 @@ public final class Board {
 	
 	
 	private void fillHollows(int count) {
+		int marbleNum = 0;
 		for (int i = 1; i <= getHollowCount(); i++) {
-			getHollow(player1, i).setMarbles(count);
-			getHollow(player2, i).setMarbles(count);
+			List<Marble> mList1 = new ArrayList<Marble>();
+			List<Marble> mList2 = new ArrayList<Marble>();
+			
+			// Create marbles for both hollows
+			for (int j = 0; j < count; j++){
+				Marble marble1 = new Marble();
+				Marble marble2 = new Marble();
+				marble1.setNumber(marbleNum++);
+				marble2.setNumber(marbleNum++);
+				mList1.add(marble1);
+				mList2.add(marble2);
+			}
+			// Clear marbles
+			getHollow(player1, i).setMarbles(0);
+			getHollow(player2, i).setMarbles(0);
+			
+			// Add new marbles
+			getHollow(player1, i).addMarbles(mList1);
+			getHollow(player2, i).addMarbles(mList2);
 		}
 	}
 	
@@ -268,5 +318,73 @@ public final class Board {
 	}
 	
 	
+
+	public List<Hollow> getPossibleMoves()
+	{
+		List<Hollow> playerHollows = new ArrayList<Hollow>();
+		if (getActivePlayer().equals(player1)) {
+			playerHollows = player1Hollows;
+		} else {
+			playerHollows = player2Hollows;
+		}
+		
+		List<Hollow> moveList = new ArrayList<Hollow>();
+		if (!isWinSituation()) 
+		{
+			for (Hollow h : playerHollows) {
+				if (!h.isEmpty()) {
+					moveList.add(h);
+				}
+			}
+		}
+		return moveList;
+	}
+	
+	public void catchMarbles(Hollow current) {
+		KalahaHollow playerKalaha = getKalaha(getActivePlayer());
+
+		if (!current.equals(playerKalaha) && current.getMarbleCount() == 1 && current.getOwner() == getActivePlayer() &&
+				!getOppositeHollow(current).isEmpty()) {
+			List<Marble> marbles = getOppositeHollow(current).getMarbles();
+			marbles.addAll(current.getMarbles());
+			playerKalaha.addMarbles(marbles);
+		}
+	}
+	
+	public Hollow takeMarbles(Hollow hollow) {
+		List<Marble> marbles = hollow.getMarbles();
+		Hollow current = hollow;
+		int count = marbles.size();
+		for (int i = 1; i <= count; i++) {
+			current = getNextHollow(current);
+			current.addMarble(marbles.get(0));
+			marbles.remove(0);
+		}
+		return current;
+	}
+	
+	public void checkExtraTurn(Hollow current) {
+		KalahaHollow  playerKalaha = getKalaha(getActivePlayer());
+		
+		if (!current.equals(playerKalaha)) {
+			// Switch the active player after a turn
+			switchActivePlayer();
+		}
+	}
+	
+	public void takeAllMarbles() {
+		Player player = getActivePlayer();
+		   
+		if (arePlayerHollowsEmpty(player))
+		{
+			switchActivePlayer();
+		    player = getActivePlayer();
+		    
+			
+			KalahaHollow kalaha = getKalaha(player);
+		    kalaha.addMarbles(getHollowsMarbles(player));
+		    switchActivePlayer();
+		}
+	}
 
 }

@@ -93,9 +93,19 @@ public class Hollow {
 	 * @return the marbles list
 	 */
 	public List<Marble> getMarbles() {
+		List<Marble> marbleList = getMarblesList();
+		marbles.clear();
+		return marbleList;
+	}
+	
+	/**
+	 * Gets the list of marbles of the hollow.
+	 *
+	 * @return the marbles list
+	 */
+	public List<Marble> getMarblesList() {
 		List<Marble> marbleList = new ArrayList<Marble>();
 		marbleList.addAll(marbles);
-		marbles.clear();
 		return marbleList;
 	}
 }

@@ -1,6 +1,5 @@
 package de.htwg.kalaha.model;
 
-import de.htwg.kalaha.model.Player;
 import junit.framework.TestCase;
 
 public class PlayerTest extends TestCase { 

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import de.htwg.kalaha.controller.KalahaController;
+import de.htwg.kalaha.controller.impl.KalahaController;
 import de.htwg.util.observer.Event;
 import de.htwg.util.observer.IObserver;
 
@@ -35,11 +35,15 @@ public class TextUI implements IObserver {
 	public void printTUI() {
 		logger.info(newLine + controller.getBoardString());
 		logger.info(newLine + controller.getStatus());
-		logger.info(newLine + "Please enter a command( q - quit, u - update, n - new, px,y - take marbles from player x, hollow y):");
+		logger.info(newLine + "Please enter a command( q - quit; u - update; n - new; c[1-3] - set AI Level 1-3, c - CPU Turn, px,y - take marbles from player x, hollow y):");
 	}
 	
 	public boolean handleInputOrQuit(String line) {	
 		boolean quit=false;
+		if (line.equalsIgnoreCase("u")) {
+			update(null);
+		}
+		
 		if (line.equalsIgnoreCase("q")) {
 			quit=true;
 		}
@@ -49,24 +53,37 @@ public class TextUI implements IObserver {
 			controller.prepareNewGame();
 		}
 		
-		// Take marbles out of a hollow (p1,3 p2,6 ...)
-		if (line.matches("p[1-2],[1-6]")){
-			Pattern p = Pattern.compile("[0-9]");
-			Matcher m = p.matcher(line);
+		if (!controller.isWinSituation())
+		{
+		
+			// Take marbles out of a hollow (p1,3 p2,6 ...)
+			if (line.matches("p[1-2],[1-6]")) {
+				Pattern p = Pattern.compile("[0-9]");
+				Matcher m = p.matcher(line);
+				
+				int[] arg = new int[2];
+				for (int i = 0; i < arg.length; i++) {
+					m.find();
+					arg[i] = Integer.parseInt(m.group());
+				} 
+				controller.takeMarbles(arg[0], arg[1]);
+			}
 			
-			int[] arg = new int[2];
-			for (int i = 0; i < arg.length; i++) {
+			if (line.equalsIgnoreCase("c")) {
+				controller.doAiTurn();
+			}
+			if (line.matches("c[1-3]")) {
+				Pattern p = Pattern.compile("[1-3]");
+				Matcher m = p.matcher(line);
 				m.find();
-				arg[i] = Integer.parseInt(m.group());
-			} 
-			controller.takeMarbles(arg[0], arg[1]);
+				controller.setAILevel(Integer.parseInt(m.group()));
+			}
 		}
 		
 		controller.checkWinSituation();
 		
 		return quit;
 	}
-
 
 
 }

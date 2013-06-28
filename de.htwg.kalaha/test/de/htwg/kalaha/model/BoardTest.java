@@ -1,7 +1,9 @@
 package de.htwg.kalaha.model;
 
-import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 import junit.framework.TestCase;
 
@@ -21,6 +23,11 @@ public class BoardTest extends TestCase {
 		assertEquals(board.getHollow(player1, 2), board.getNextHollow(board.getHollow(player1, 1)));
 		assertEquals(board.getHollow(player2, 6), board.getNextHollow(board.getHollow(player2, 5)));
 		assertNull(board.getHollow(new Player("Someone else"), 1));
+	}
+	
+	public void testGetHollowNumber() {
+		assertEquals(board.getHollowNumber(board.getHollow(player1, 2)),2);
+		assertEquals(board.getHollowNumber(board.getHollow(player2, 2)),2);
 	}
 	
 	public void testGetOppositeHollow() {
@@ -49,6 +56,12 @@ public class BoardTest extends TestCase {
 		assertEquals(board.getNextHollow(board.getHollow(player2, 6)), board.getKalaha(player2));
 		Player somebody = new Player("Someone else");
 		assertNull(board.getKalaha(somebody));
+	}
+	
+	public void testGetClone() {
+		assertNotNull(board.getClone());
+		board.switchActivePlayer();
+		assertNotNull(board.getClone());
 	}
 	
 	public void testSwitchActivePlayer() {
@@ -154,5 +167,82 @@ public class BoardTest extends TestCase {
 		assertEquals(board.getKalaha(player2).getMarbleCount(),4);
 	}
 
+	
+	public void testGetPossibleMoves() {
+		board = new Board(player1,player2, 2,1);
+		board.prepareBoard();
+		board.getHollow(player1, 1).setMarbles(0);
+
+		assertEquals(board.getPossibleMoves().size(), 1);
+		assertEquals(board.getPossibleMoves().get(0), board.getHollow(player1, 2));
+		assertTrue(board.getPossibleMoves().contains(board.getHollow(player1, 2)));
+		
+		board.switchActivePlayer();
+		assertTrue(board.getPossibleMoves().contains(board.getHollow(player2, 1)));
+		assertTrue(board.getPossibleMoves().contains(board.getHollow(player2, 2)));
+		
+		board = new Board(player1,player2, 1,0);
+		board.prepareBoard();
+		assertEquals(board.getPossibleMoves().size(), 0);
+		
+		
+	}
+
+	public void testCatchMarbles() {
+		board = new Board(player1,player2, 2,1);
+		board.prepareBoard();
+		
+		// Kalaha Hollow
+		board.catchMarbles(board.getKalaha(player1));
+		
+		// Wrong marble number
+		board.getHollow(player1, 1).setMarbles(0);
+		board.catchMarbles(board.getHollow(player1,1));
+		
+		// Wrong player
+		board.catchMarbles(board.getHollow(player2,1));
+		
+		// Opposite Hollow is empty
+		board.getHollow(player1, 1).setMarbles(1);
+		board.getHollow(player2, 2).setMarbles(0);
+		board.catchMarbles(board.getHollow(player1,1));
+		
+		// Catch successfull
+		board.getHollow(player2, 2).setMarbles(1);
+		board.catchMarbles(board.getHollow(player1,1));
+	}
+
+	public void testTakeMarbles() {
+		board = new Board(player1,player2, 2,1);
+		board.prepareBoard();
+		
+		assertEquals(board.takeMarbles(board.getHollow(player1, 1)),board.getHollow(player1, 2));
+		assertEquals(board.takeMarbles(board.getHollow(player1, 2)).getMarbleCount(),2);
+	}
+	
+	public void testCheckExtraTurn() {
+		board = new Board(player1,player2, 1,1);
+		board.prepareBoard();
+		
+		Player p = board.getActivePlayer();
+		board.checkExtraTurn(board.getKalaha(p));
+		assertEquals(board.getActivePlayer(),p);
+		
+		board.checkExtraTurn(board.getHollow(p,1));
+		assertNotSame(board.getActivePlayer(),p);
+	}
+	
+	public void testTakeAllMarbles() {
+		board = new Board(player1,player2, 1,1);
+		board.prepareBoard();
+		
+		board.getHollow(player1, 1).setMarbles(1);
+		board.takeAllMarbles();
+		assertEquals(board.getHollow(player2, 1).getMarbleCount(),1);
+		
+		board.getHollow(player1, 1).setMarbles(0);
+		board.takeAllMarbles();
+		assertEquals(board.getHollow(player2, 1).getMarbleCount(),0);
+	}
 
 }

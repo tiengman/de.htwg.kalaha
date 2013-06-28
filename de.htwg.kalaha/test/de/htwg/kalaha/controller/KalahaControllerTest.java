@@ -1,5 +1,6 @@
 package de.htwg.kalaha.controller;
 
+import de.htwg.kalaha.controller.impl.KalahaController;
 import junit.framework.TestCase;
 
 public class KalahaControllerTest extends TestCase {
@@ -16,6 +17,23 @@ public class KalahaControllerTest extends TestCase {
     
     public void testGetBoardString() {
     	assertNotNull(controller.getBoardString());
+    }
+    
+    public void testIsAiTurn() {
+    	assertFalse(controller.isAiTurn());
+    }
+    
+    public void testSetAiLevel() {
+    	controller.setAILevel(1);
+    	controller.setAILevel(2);
+    	controller.setAILevel(3);
+    	assertFalse(controller.isAiTurn());
+    }
+    
+    public void testGetWinner() {
+    	controller = new KalahaController(1,2);
+    	controller.takeMarbles(1, 1);
+    	assertNotNull(controller.getWinner());
     }
     
     public void testTakeMarbles() {
@@ -78,6 +96,18 @@ public class KalahaControllerTest extends TestCase {
     	controller.checkWinSituation();
     	assertEquals(controller.getStatus(), "Draw!"); 
     }
+    
+    public void testGetActivePlayer() {
+    	assertEquals(controller.getActivePlayer(), 1); 
+    	controller.takeMarbles(1, 2);
+    	assertEquals(controller.getActivePlayer(), 2); 
+    }
 	
+    
+    public void testGetKalahaContent() {
+    	controller.takeMarbles(1, 2);
+    	controller.takeMarbles(2, 2);
+    	assertNotNull(controller.getKalahaContent(1));
+    }
 	
 }

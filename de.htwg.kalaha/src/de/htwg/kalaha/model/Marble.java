@@ -4,7 +4,16 @@ public class Marble {
 	public static enum MarbleType {BONE,DIAMOND,MARBLE,SEED,STICK,STONE};
 	
 	private MarbleType type;
+	private int number;
 	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	/**
 	 * Instantiates a new marble.
 	 */
@@ -30,5 +39,6 @@ public class Marble {
 	public void setType(MarbleType type) {
 		this.type = type;
 	}
+	
 
 }

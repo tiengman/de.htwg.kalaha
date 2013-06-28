@@ -17,7 +17,7 @@ public class KalahaHollowTest extends TestCase {
 	}
 	
 	public void testGetMarbles() {
-		assertEquals(null,kHollow.getMarbles());
+		assertEquals(0,kHollow.getMarbles().size());
 	}
 
 }

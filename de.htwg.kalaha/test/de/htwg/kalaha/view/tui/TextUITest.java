@@ -3,7 +3,7 @@ package de.htwg.kalaha.view.tui;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import de.htwg.kalaha.controller.KalahaController;
+import de.htwg.kalaha.controller.impl.KalahaController;
 import junit.framework.TestCase;
 
 public class TextUITest extends TestCase {
@@ -16,6 +16,12 @@ public class TextUITest extends TestCase {
 		assertTrue(tui.handleInputOrQuit("q"));
 		assertFalse(tui.handleInputOrQuit("n"));
 		assertFalse(tui.handleInputOrQuit("u"));
+		assertFalse(tui.handleInputOrQuit("p1,1"));
+		assertFalse(tui.handleInputOrQuit("c1"));
+		assertFalse(tui.handleInputOrQuit("c"));
+		
+		// Win Situation
+		tui = new TextUI(new KalahaController(1,0));
 		assertFalse(tui.handleInputOrQuit("p1,1"));
 	}
 	
